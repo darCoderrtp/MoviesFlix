@@ -40,8 +40,6 @@ export default function AppComponent() {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
-
-
   useEffect(() => {
     SplashScreen.hide();
     fcmService.registerAppWithFCM();
@@ -69,21 +67,6 @@ export default function AppComponent() {
 
     function onOpenNotification(notify) {
       if (notify.data.body === 'msg') {
-        //   setTimeout(() => {
-        //     RootNavigation.navigate('UserHome', {screen: 'Messages'});
-        //   }, 1000);
-        // } else if (notify.data.body === 'prof') {
-        //   setTimeout(() => {
-        //     RootNavigation.navigate('UserHome', {
-        //       screen: 'ProfInbox',
-        //     });
-        //   }, 1000);
-        // } else if (notify.data.body === 'project') {
-        //   setTimeout(() => {
-        //     RootNavigation.navigate('UserHome', {
-        //       screen: 'NetworkInbox',
-        //     });
-        //   }, 1000);
       } else {
         console.log('ok');
       }
@@ -91,36 +74,11 @@ export default function AppComponent() {
       console.log('[App] onOpenNotification: ', notify);
     }
 
-    if (account && account.id) getUserProfile();
-    let eventListner = EventRegister.addEventListener('profileImage', data => {
-      console.log('IMAGEEEE', 'updated image');
-      if (account && account.id) getUserProfile();
-    });
+
     return () => {
       EventRegister.removeEventListener(eventListner);
     };
   }, [account]);
-
-  async function getUserProfile() {
-    console.log('app. jsss');
-    let requestObj = {
-      user_id: account.id,
-      licence_plate: '1',
-    };
-
-    console.log('request', requestObj);
-    let res = await httpService.POST(USER_DETAILS, requestObj);
-
-    if (res.status) {
-      console.log('response', res);
-      if (res.data.user != null) {
-        setProfileImage(res.data.user.profile_image);
-      }
-    } else {
-      console.log('response', res);
-      //showToast({text2: res.message, type: 'error'});
-    }
-  }
 
   return (
     <PaperProvider theme={CustomTheme()}>
@@ -154,18 +112,6 @@ export default function AppComponent() {
                 shadowRadius: 10.0,
                 elevation: 10,
               }}>
-              {/* <Tab.Screen name="Home" component={HomeStack}
-                options={{
-                  tabBarLabel: 'Home',
-                  tabBarIcon: ({ focused, color }) => { 
-                    return (
-                      <Image
-                        resizeMode="contain"
-                        style={styles.bottomNavImg}
-                        source={focused ? images.home_bn_active : images.home_bn} />
-                    )
-                  },
-                }} /> */}
               <Tab.Screen
                 name="Home"
                 component={BookNowStack}
@@ -241,7 +187,6 @@ export default function AppComponent() {
                               ? images.profileWhiteNew
                               : images.profileBlackNew
                         }
-                      // source={{ uri: profileImg }}
                       />
                     );
                   },
